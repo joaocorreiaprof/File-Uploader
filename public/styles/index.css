@@ -83,7 +83,6 @@ header {
 }
 
 /*Main Content*/
-
 /*Not logged in*/
 .index-sign-up,
 .index-log-in {
@@ -164,6 +163,8 @@ header {
   color: #2c3e50;
   margin-bottom: 15px;
 }
+
+/*Logged*/
 
 /*Footer*/
 

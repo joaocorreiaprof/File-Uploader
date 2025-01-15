@@ -7,6 +7,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const multer = require("multer");
 
 // Set up views
 app.set("views", path.join(__dirname, "views"));
@@ -28,6 +29,19 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "files");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    const fileExtension = path.extname(file.originalname);
+    const filename = Date.now() + fileExtension;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Passport LocalStrategy
 passport.use(
@@ -113,6 +127,14 @@ app.get("/log-out", (req, res, next) => {
       res.redirect("/");
     });
   });
+});
+
+app.get("/upload", (req, res) => {
+  res.render("upload");
+});
+
+app.post("/upload", upload.single("file"), (req, res) => {
+  res.send("Image Uploaded");
 });
 
 // Start the server
