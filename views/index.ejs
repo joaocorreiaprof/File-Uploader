@@ -4,20 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homepage</title>
+    <link rel="stylesheet" href="/styles/index.css" />
   </head>
   <body>
-    <% if (locals.user) { %>
-    <h1>Welcome <%= user.username %></h1>
-    <a href="/log-out">LOG OUT</a>
-    <% } else { %>
-    <h1>Please log in</h1>
-    <form action="/log-in" method="POST">
-      <label for="username">Username</label>
-      <input id="username" name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" />
-      <button>Log In</button>
-    </form>
-    <% } %>
+    <header>
+      <div class="header-left">
+        <p>File Uploader</p>
+      </div>
+      <div class="header-right">
+        <% if (locals.user) { %>
+        <div class="user-profile">
+          <div class="avatar"><%= user.username.charAt(0) %></div>
+          <span class="username">@<%= user.username %></span>
+        </div>
+        <a href="/log-out" class="logged-in">LOG OUT</a>
+        <% } else { %>
+        <a href="/sign-up" class="logged-out">Sign up</a>
+        <a href="/log-in" class="logged-out">Log in</a>
+        <% } %>
+      </div>
+    </header>
+    <div class="main-content">
+      <% if(locals.user) { %>
+      <h1>You are logged</h1>
+      <%} else { %>
+      <div class="index-forms">
+        <div class="index-sign-up">
+          <form action="/sign-up" method="POST">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              placeholder="username"
+              type="text"
+            />
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+            <button>Sign Up</button>
+          </form>
+        </div>
+        <div class="index-log-in">
+          <form action="/log-in" method="POST">
+            <label for="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              placeholder="username"
+              type="text"
+            />
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+            <button>Log In</button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 File Uploader. All rights reserved.</p>
+      </div>
+    </footer>
   </body>
 </html>

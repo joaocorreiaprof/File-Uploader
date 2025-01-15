@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 // Set up views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -79,12 +80,10 @@ app.post("/sign-up", async (req, res) => {
       data: { username, password: hashedPassword },
     });
 
-    // Log the user in automatically after sign-up
     req.login(newUser, (err) => {
       if (err) {
         return res.status(500).send("An error occurred while logging in.");
       }
-      // Redirect to the homepage after successful login
       res.redirect("/");
     });
   } catch (error) {
@@ -96,7 +95,7 @@ app.post("/sign-up", async (req, res) => {
     }
   }
 });
-
+app.get("/log-in", (req, res) => res.render("log-in-form"));
 app.post(
   "/log-in",
   passport.authenticate("local", {
