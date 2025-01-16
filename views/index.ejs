@@ -29,23 +29,44 @@
             placeholder="New Folder Name"
             required
           />
-          <button type="submit">Create Folder</button>
+          <button type="submit" class="folder-submit-button">
+            Create Folder
+          </button>
         </form>
         <h2>Your Folders</h2>
-        <div class="folders-list">
-          <% if (folders && folders.length > 0) { %> <%
-          folders.forEach(function(folder) { %>
-          <div class="folder">
-            <h3><%= folder.name %></h3>
-            <p>Created at: <%= folder.createdAt %></p>
-            <p>Updated at: <%= folder.updatedAt %></p>
-          </div>
-          <% }); %> <% } else { %>
-          <p>No folders found.</p>
-          <% } %>
-        </div>
+        <table class="folders-table">
+          <thead>
+            <tr>
+              <th>Folder Name</th>
+              <th>Size</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (folders && folders.length > 0) { %> <%
+            folders.forEach(function(folder) { %>
+            <tr>
+              <td><%= folder.name %></td>
+              <td></td>
+              <td><%= folder.createdAt %></td>
+              <td><%= folder.updatedAt %></td>
+              <td>
+                <button class="edit-btn">Edit</button>
+                <button class="delete-btn">Delete</button>
+              </td>
+            </tr>
+            <% }); %> <% } else { %>
+            <tr>
+              <td colspan="4">No folders found.</td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
       </div>
     </div>
+
     <footer>
       <div class="footer-content">
         <p>&copy; 2025 File Uploader. All rights reserved.</p>

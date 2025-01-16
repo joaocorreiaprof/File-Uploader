@@ -1,6 +1,12 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f06, #4c6ef5);
+  background: linear-gradient(135deg, #3a3f51, #4c6ef5); /* Darker gradient */
   margin: 0;
   padding: 0;
   display: flex;
@@ -11,29 +17,27 @@ body {
 }
 
 /* Container to hold both forms side by side */
-div {
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 40px;
-  max-width: 1000px;
+  max-width: 900px;
   width: 100%;
   padding: 20px;
-  border-radius: 15px;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
 }
 
 /* Form Styling */
-form {
-  background-color: #fff;
+.form-container {
+  background: rgba(255, 255, 255, 0.1); /* Darker background */
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   width: 45%;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  backdrop-filter: blur(10px);
 }
 
 /* Heading Style */
@@ -47,19 +51,26 @@ h1 {
   letter-spacing: 2px;
 }
 
+/* Input Group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
 /* Form Labels */
 label {
   font-size: 14px;
   font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
+  color: #ddd;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 /* Input Fields */
 input {
-  padding: 12px;
+  padding: 14px;
   border: 2px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
@@ -71,6 +82,7 @@ input:focus {
   border-color: #4c6ef5;
   outline: none;
   background-color: #fff;
+  box-shadow: 0 0 10px rgba(76, 110, 245, 0.5);
 }
 
 /* Button Styles */
@@ -83,26 +95,27 @@ button {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  letter-spacing: 1px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #3658c1;
+  transform: translateY(-2px);
 }
 
 button:active {
   background-color: #274091;
+  transform: translateY(1px);
 }
 
 /* Small Screen Adjustments */
 @media (max-width: 768px) {
-  div {
+  .container {
     flex-direction: column;
     gap: 20px;
   }
 
-  form {
+  .form-container {
     width: 80%;
   }
 }
