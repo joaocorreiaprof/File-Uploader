@@ -8,4 +8,10 @@ router.put("/edit-folder/:id", folderController.editFolder);
 // Route for deleting a folder
 router.delete("/delete-folder/:id", folderController.deleteFolder);
 
+// Enter folder file
+router.get("/folder/:id", folderController.folderPage);
+
+// Route for uploading a file to a folder
+router.post("/folder/:id/upload", folderController.uploadFileToFolder);
+
 module.exports = router;
