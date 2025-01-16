@@ -10,6 +10,7 @@ const homeRoutes = require("./routes/homeRoutes");
 const authRoutes = require("./routes/authRoutes");
 const fileRoutes = require("./routes/fileRoutes");
 const crudRoutes = require("./routes/crudRoutes");
+const folderRoutes = require("./routes/folderRoutes");
 
 // Import passport configuration
 require("./passport-config");
@@ -47,6 +48,7 @@ app.use(homeRoutes);
 app.use(authRoutes);
 app.use(fileRoutes);
 app.use(crudRoutes);
+app.use(folderRoutes);
 
 // Start the server
 const PORT = 3000;
