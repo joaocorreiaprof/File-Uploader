@@ -29,6 +29,8 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
+// Configure multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "files");
@@ -109,7 +111,9 @@ app.post("/sign-up", async (req, res) => {
     }
   }
 });
+
 app.get("/log-in", (req, res) => res.render("log-in-form"));
+
 app.post(
   "/log-in",
   passport.authenticate("local", {

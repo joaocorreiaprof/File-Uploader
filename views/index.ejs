@@ -24,10 +24,11 @@
         <% } %>
       </div>
     </header>
+
     <div class="main-content">
-      <% if(locals.user) { %>
-      <a href="/upload"> Upload a file</a>
-      <%} else { %>
+      <% if (locals.user) { %>
+      <h1>Welcome, <%= locals.user.username %>!</h1>
+      <% } else { %>
       <div class="index-forms">
         <div class="index-sign-up">
           <form action="/sign-up" method="POST">
@@ -60,6 +61,7 @@
       </div>
       <% } %>
     </div>
+
     <footer>
       <div class="footer-content">
         <p>&copy; 2025 File Uploader. All rights reserved.</p>
