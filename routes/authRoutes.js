@@ -13,6 +13,13 @@ router.post(
   })
 );
 
+//Sign-up route
+router.get("/sign-up", authController.getSignUpForm);
+
+//Log-in route
+
+router.get("/log-in", authController.getLoginForm);
+
 // Log-out route
 router.get("/log-out", authController.logOut);
 
