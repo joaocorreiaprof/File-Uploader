@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const folderController = require("../controllers/folderController");
 
+// Route for editing a folder
+router.put("/edit-folder/:id", folderController.editFolder);
+
 // Route for deleting a folder
 router.delete("/delete-folder/:id", folderController.deleteFolder);
 

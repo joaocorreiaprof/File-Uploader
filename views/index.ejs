@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Library</title>
     <link rel="stylesheet" href="/styles/index.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
     <header>
@@ -19,6 +20,7 @@
         <a href="/log-out" class="logged-in">LOG OUT</a>
       </div>
     </header>
+
     <div class="main-content">
       <h1>Welcome, <%= locals.user.username %>!</h1>
       <div class="user-library">
@@ -53,19 +55,37 @@
               <td><%= folder.createdAt %></td>
               <td><%= folder.updatedAt %></td>
               <td>
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn" data-id="<%= folder.id %>">
+                <button
+                  class="edit-btn"
+                  data-folder-id="<%= folder.id %>"
+                  data-folder-name="<%= folder.name %>"
+                >
+                  Edit
+                </button>
+                <button class="delete-btn" data-folder-id="<%= folder.id %>">
                   Delete
                 </button>
               </td>
             </tr>
             <% }); %> <% } else { %>
             <tr>
-              <td colspan="4">No folders found.</td>
+              <td colspan="5">No folders found.</td>
             </tr>
             <% } %>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Edit Folder Modal -->
+    <div id="editFolderModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Folder Name</h2>
+        <form id="editFolderForm">
+          <input type="text" id="editFolderName" name="folderName" required />
+          <button type="submit">Save Changes</button>
+        </form>
       </div>
     </div>
 
@@ -74,28 +94,76 @@
         <p>&copy; 2025 File Uploader. All rights reserved.</p>
       </div>
     </footer>
-  </body>
-  <script>
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-      button.addEventListener("click", async (event) => {
-        event.preventDefault();
-        const folderId = event.target.getAttribute("data-id");
-        if (confirm("Are you sure you want to delete this folder?")) {
-          try {
-            const response = await fetch(`/delete-folder/${folderId}`, {
-              method: "DELETE",
-            });
-            if (response.ok) {
-              location.reload();
-            } else {
+
+    <script>
+      document.querySelectorAll(".delete-btn").forEach((button) => {
+        button.addEventListener("click", async (event) => {
+          event.preventDefault();
+          const folderId = event.target.getAttribute("data-folder-id");
+
+          if (confirm("Are you sure you want to delete this folder?")) {
+            try {
+              const response = await fetch(`/delete-folder/${folderId}`, {
+                method: "DELETE",
+              });
+
+              if (response.ok) {
+                location.reload(); // Reload the page to reflect the change
+              } else {
+                // Log the response for debugging
+                const errorResponse = await response.text();
+                console.error("Error deleting folder:", errorResponse);
+                alert("Error deleting folder");
+              }
+            } catch (error) {
+              console.error("Error:", error);
               alert("Error deleting folder");
             }
-          } catch (error) {
-            console.error("Error:", error);
-            alert("Error deleting folder");
           }
-        }
+        });
       });
-    });
-  </script>
+
+      $(document).ready(function () {
+        // Open the modal when the Edit button is clicked
+        $(".edit-btn").click(function () {
+          const folderId = $(this).data("folder-id");
+          const folderName = $(this).data("folder-name");
+          $("#editFolderName").val(folderName);
+          $("#editFolderForm").attr("action", `/edit-folder/${folderId}`);
+          $("#editFolderModal").show();
+        });
+
+        // Close the modal
+        $(".close").click(function () {
+          $("#editFolderModal").hide();
+        });
+
+        // Handle form submission
+        $("#editFolderForm").submit(function (event) {
+          event.preventDefault();
+          const folderId = $(this).attr("action").split("/").pop(); // Extract folderId from form action
+          const folderName = $("#editFolderName").val();
+
+          $.ajax({
+            url: `/edit-folder/${folderId}`,
+            method: "PUT",
+            data: { folderName: folderName },
+            success: function (response) {
+              location.reload(); // Reload the page after successful edit
+            },
+            error: function (error) {
+              alert("Error updating folder");
+            },
+          });
+        });
+
+        // Close modal when clicked outside
+        $(window).click(function (event) {
+          if ($(event.target).is("#editFolderModal")) {
+            $("#editFolderModal").hide();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
