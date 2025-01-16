@@ -1,28 +1,39 @@
 const express = require("express");
-const app = express();
-const path = require("node:path");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
+const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const multer = require("multer");
 
-// Set up views
+// Import routes
+const homeRoutes = require("./routes/homeRoutes");
+const authRoutes = require("./routes/authRoutes");
+const fileRoutes = require("./routes/fileRoutes");
+
+// Import passport configuration
+require("./passport-config");
+
+const app = express();
+
+// Middleware for Express and Passport setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
-
-// Middleware
 app.use(express.urlencoded({ extended: false }));
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use((req, res, next) => {
@@ -30,116 +41,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Configure multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "files");
-  },
-  filename: (req, file, cb) => {
-    console.log(file);
-    const fileExtension = path.extname(file.originalname);
-    const filename = Date.now() + fileExtension;
-    cb(null, filename);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Passport LocalStrategy
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await prisma.user.findUnique({ where: { username } });
-
-      if (!user) {
-        return done(null, false, { message: "Invalid credentials" });
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return done(null, false, { message: "Invalid credentials" });
-      }
-
-      return done(null, user);
-    } catch (error) {
-      return done(error);
-    }
-  })
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await prisma.user.findUnique({ where: { id } });
-    done(null, user);
-  } catch (error) {
-    done(error);
-  }
-});
-
-// Routes
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
-});
-
-app.get("/sign-up", (req, res) => res.render("sign-up-form"));
-
-app.post("/sign-up", async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await prisma.user.create({
-      data: { username, password: hashedPassword },
-    });
-
-    req.login(newUser, (err) => {
-      if (err) {
-        return res.status(500).send("An error occurred while logging in.");
-      }
-      res.redirect("/");
-    });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    if (error.code === "P2002") {
-      res.status(400).send("Username already exists.");
-    } else {
-      res.status(500).send("An unexpected error occurred. Please try again.");
-    }
-  }
-});
-
-app.get("/log-in", (req, res) => res.render("log-in-form"));
-
-app.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/",
-  })
-);
-
-app.get("/log-out", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.session.destroy(() => {
-      res.redirect("/");
-    });
-  });
-});
-
-app.get("/upload", (req, res) => {
-  res.render("upload");
-});
-
-app.post("/upload", upload.single("file"), (req, res) => {
-  res.send("Image Uploaded");
-});
+// Use routes
+app.use(homeRoutes);
+app.use(authRoutes);
+app.use(fileRoutes);
 
 // Start the server
 const PORT = 3000;
