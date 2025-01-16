@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
+    <title>User Library</title>
     <link rel="stylesheet" href="/styles/index.css" />
   </head>
   <body>
@@ -12,57 +12,40 @@
         <p>File Uploader</p>
       </div>
       <div class="header-right">
-        <% if (locals.user) { %>
         <div class="user-profile">
           <div class="avatar"><%= user.username.charAt(0) %></div>
           <span class="username">@<%= user.username %></span>
         </div>
         <a href="/log-out" class="logged-in">LOG OUT</a>
-        <% } else { %>
-        <a href="/sign-up" class="logged-out">Sign up</a>
-        <a href="/log-in" class="logged-out">Log in</a>
-        <% } %>
       </div>
     </header>
-
     <div class="main-content">
-      <% if (locals.user) { %>
       <h1>Welcome, <%= locals.user.username %>!</h1>
-      <div class="user-library"></div>
-      <% } else { %>
-      <div class="index-forms">
-        <div class="index-sign-up">
-          <form action="/sign-up" method="POST">
-            <label for="username">Username</label>
-            <input
-              id="username"
-              name="username"
-              placeholder="username"
-              type="text"
-            />
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" />
-            <button>Sign Up</button>
-          </form>
-        </div>
-        <div class="index-log-in">
-          <form action="/log-in" method="POST">
-            <label for="username">Username</label>
-            <input
-              id="username"
-              name="username"
-              placeholder="username"
-              type="text"
-            />
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password" />
-            <button>Log In</button>
-          </form>
+      <div class="user-library">
+        <form action="/create-folder" method="POST">
+          <input
+            type="text"
+            name="folderName"
+            placeholder="New Folder Name"
+            required
+          />
+          <button type="submit">Create Folder</button>
+        </form>
+        <h2>Your Folders</h2>
+        <div class="folders-list">
+          <% if (folders && folders.length > 0) { %> <%
+          folders.forEach(function(folder) { %>
+          <div class="folder">
+            <h3><%= folder.name %></h3>
+            <p>Created at: <%= folder.createdAt %></p>
+            <p>Updated at: <%= folder.updatedAt %></p>
+          </div>
+          <% }); %> <% } else { %>
+          <p>No folders found.</p>
+          <% } %>
         </div>
       </div>
-      <% } %>
     </div>
-
     <footer>
       <div class="footer-content">
         <p>&copy; 2025 File Uploader. All rights reserved.</p>

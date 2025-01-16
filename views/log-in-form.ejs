@@ -3,76 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Log In</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #f0f4f8;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        color: #333;
-        margin-bottom: 1rem;
-      }
-
-      form {
-        background-color: #ffffff;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 300px;
-        text-align: center;
-      }
-
-      label {
-        font-size: 1rem;
-        color: #555;
-        display: block;
-        margin-bottom: 0.5rem;
-        text-align: left;
-      }
-
-      input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1rem;
-        box-sizing: border-box;
-      }
-
-      input:focus {
-        border-color: #0066cc;
-        outline: none;
-      }
-
-      button {
-        width: 100%;
-        padding: 12px;
-        background-color: #0066cc;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      button:hover {
-        background-color: #004d99;
-      }
-
-      button:active {
-        background-color: #003366;
-      }
-    </style>
+    <title>Log In/ Sign Up</title>
+    <link rel="stylesheet" href="styles/forms.css" />
   </head>
   <body>
     <div>
@@ -94,6 +26,26 @@
         />
         <button type="submit">Log In</button>
       </form>
+      <div>
+        <h1>Sign Up</h1>
+        <form action="/sign-up" method="POST">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            type="text"
+          />
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

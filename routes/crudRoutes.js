@@ -18,5 +18,7 @@ router.get("/", (req, res) => {
     res.render("index", { user: req.user, folders: folders });
   });
 });
+//Create user fodler
+router.post("/create-folder", crudController.createUserFolder);
 
 module.exports = router;

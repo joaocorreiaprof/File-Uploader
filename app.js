@@ -9,6 +9,7 @@ const prisma = new PrismaClient();
 const homeRoutes = require("./routes/homeRoutes");
 const authRoutes = require("./routes/authRoutes");
 const fileRoutes = require("./routes/fileRoutes");
+const crudRoutes = require("./routes/crudRoutes");
 
 // Import passport configuration
 require("./passport-config");
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 app.use(homeRoutes);
 app.use(authRoutes);
 app.use(fileRoutes);
+app.use(crudRoutes);
 
 // Start the server
 const PORT = 3000;
