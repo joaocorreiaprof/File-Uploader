@@ -52,6 +52,13 @@
               <button class="delete-btn" data-file-id="<%=file.id %>">
                 Delete
               </button>
+              <button
+                class="download-btn"
+                data-file-id="<%= file.id %>"
+                data-file-name="<%= file.filename %>"
+              >
+                Download
+              </button>
             </td>
           </tr>
           <% }); %> <% } else { %>

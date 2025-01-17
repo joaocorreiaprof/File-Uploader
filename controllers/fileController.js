@@ -55,4 +55,36 @@ module.exports = {
       res.status(500).send("Error updating file");
     }
   },
+
+  downloadFile: async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      // Get file metadata from the database
+      const file = await prisma.file.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (!file) {
+        return res.status(404).send("File not found");
+      }
+
+      const filePath = path.join(__dirname, "../uploads", file.filename);
+      console.log("File path:", filePath);
+
+      // URL encode the file name
+      const encodedFileName = encodeURIComponent(file.filename);
+
+      // Send the file for download
+      res.download(filePath, encodedFileName, (err) => {
+        if (err) {
+          console.error("Error downloading file:", err);
+          res.status(500).send("Error downloading file");
+        }
+      });
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      res.status(500).send("Error downloading file");
+    }
+  },
 };

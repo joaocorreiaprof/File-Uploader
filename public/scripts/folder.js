@@ -26,7 +26,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // Adding listener for the download button
+  document.querySelectorAll(".download-btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      const fileId = event.target.getAttribute("data-file-id");
+
+      const downloadLink = document.createElement("a");
+      downloadLink.href = `/download-file/${fileId}`;
+      downloadLink.download = true;
+      downloadLink.click();
+    }); // <-- This closing brace was missing
+  });
 });
+
 $(document).ready(function () {
   $(".edit-btn").click(function () {
     const fileId = $(this).data("file-id");

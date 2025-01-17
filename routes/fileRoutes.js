@@ -12,4 +12,7 @@ router.delete("/delete-file/:id", fileController.deleteFile);
 //Editing file
 router.put("/edit-file/:id", fileController.editFile);
 
+// New route for downloading a file
+router.get("/download-file/:id", fileController.downloadFile);
+
 module.exports = router;
