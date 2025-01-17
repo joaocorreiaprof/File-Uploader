@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Folder</title>
     <link rel="stylesheet" href="/styles/folder.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/scripts/folder.js"></script>
   </head>
   <body>
     <div>
@@ -40,8 +42,16 @@
             <td>-</td>
             <td><%= file.createdAt %></td>
             <td>
-              <button class="edit-btn">Edit</button>
-              <button class="delete-btn">Delete</button>
+              <button
+                class="edit-btn"
+                data-file-id="<%= file.id %>"
+                data-file-name="<%= file.name %>"
+              >
+                Edit
+              </button>
+              <button class="delete-btn" data-file-id="<%=file.id %>">
+                Delete
+              </button>
             </td>
           </tr>
           <% }); %> <% } else { %>
@@ -56,5 +66,16 @@
       <% } %>
     </div>
     <button class="back-btn"><a href="/">Back to folders</a></button>
+
+    <div id="editFileModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit File Name</h2>
+        <form id="editFileForm">
+          <input type="text" id="editFileName" name="fileName" required />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

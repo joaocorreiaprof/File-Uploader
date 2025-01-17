@@ -51,7 +51,7 @@ $(document).ready(function () {
       method: "PUT",
       data: { folderName: folderName },
       success: function (response) {
-        location.reload(); // Reload the page after successful edit
+        location.reload();
       },
       error: function (error) {
         alert("Error updating folder");
