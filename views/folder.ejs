@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Folder</title>
+    <link rel="stylesheet" href="/styles/folder.css" />
   </head>
   <body>
     <div>
+      <% if (folder) { %>
       <h1>Folder: <%= folder.name %></h1>
 
       <!-- File upload form -->
@@ -17,18 +19,42 @@
       >
         <label for="file">Upload File:</label>
         <input type="file" name="file" id="file" required />
-        <button type="submit">Upload</button>
+        <button type="submit" class="upload">Upload</button>
       </form>
 
-      <h2>Files in this Folder</h2>
-      <ul>
-        <% if (folder.files && folder.files.length > 0) { %> <%
-        folder.files.forEach(function (file) { %>
-        <li><%= file.filename %></li>
-        <% }); %> <% } else { %>
-        <p>No files in this folder.</p>
-        <% } %>
-      </ul>
+      <h2>Files in <%= folder.name %></h2>
+      <table class="files-table">
+        <thead>
+          <tr>
+            <th>File name</th>
+            <th>Size</th>
+            <th>Created at</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (folder.files && folder.files.length > 0) { %> <%
+          folder.files.forEach(function (file) { %>
+          <tr>
+            <td><%= file.filename %></td>
+            <td>-</td>
+            <td><%= file.createdAt %></td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="4">No files in this folder.</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <p>Error: Folder not found.</p>
+      <% } %>
     </div>
+    <button class="back-btn"><a href="/">Back to folders</a></button>
   </body>
 </html>

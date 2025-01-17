@@ -35,10 +35,19 @@ module.exports = {
     const { id } = req.params;
 
     try {
+      // Delete all files associated with the folder
+      await prisma.file.deleteMany({
+        where: { folderId: parseInt(id) },
+      });
+
+      // Delete the folder
       await prisma.folder.delete({
         where: { id: parseInt(id) },
       });
-      res.status(200).json({ message: "Folder deleted successfully" });
+
+      res
+        .status(200)
+        .json({ message: "Folder and its files deleted successfully" });
     } catch (error) {
       console.error(error);
       res.status(500).send("Error deleting folder");
