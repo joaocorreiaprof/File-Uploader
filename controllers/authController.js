@@ -35,7 +35,8 @@ module.exports = {
 
   postLogin: passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/",
+    failureRedirect: "/log-in", // Redirect back to log-in on failure
+    failureFlash: true,
   }),
 
   logOut: (req, res, next) => {

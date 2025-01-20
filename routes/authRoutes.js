@@ -5,14 +5,7 @@ const authController = require("../controllers/authController");
 
 // Log-in route
 
-router.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/", // Redirect to home after successful login
-    failureRedirect: "/log-in", // Redirect to login page if authentication fails
-    failureFlash: true, // Flash message on failure (if you have it configured)
-  })
-);
+router.post("/log-in", authController.getLoginForm);
 
 //Sign-up route
 router.get("/sign-up", authController.getSignUpForm);
