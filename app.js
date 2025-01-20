@@ -1,5 +1,7 @@
 const express = require("express");
 const session = require("express-session");
+const RedisStore = require("connect-redis").default; // Ensure the default export is used
+const redis = require("redis");
 const passport = require("passport");
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
@@ -18,6 +20,15 @@ require("./passport-config");
 
 const app = express();
 
+// Create Redis client
+const redisClient = redis.createClient({
+  url: process.env.REDIS_URL,
+});
+
+redisClient
+  .connect()
+  .catch((err) => console.error("Redis connection failed:", err));
+
 // Middleware for Express and Passport setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -29,6 +40,9 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new RedisStore({
+      client: redisClient, // Use Redis for session store
+    }),
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -52,7 +66,7 @@ app.use(crudRoutes);
 app.use(folderRoutes);
 
 // Start the server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
