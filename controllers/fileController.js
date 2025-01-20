@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const path = require("path");
+const fs = require("fs");
 
 module.exports = {
   uploadFile: async (req, res) => {
@@ -60,7 +61,6 @@ module.exports = {
     const { id } = req.params;
 
     try {
-      // Get file metadata from the database
       const file = await prisma.file.findUnique({
         where: { id: parseInt(id) },
       });
@@ -70,12 +70,13 @@ module.exports = {
       }
 
       const filePath = path.join(__dirname, "../uploads", file.filename);
-      console.log("File path:", filePath);
 
-      // URL encode the file name
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).send("File not found");
+      }
+
       const encodedFileName = encodeURIComponent(file.filename);
 
-      // Send the file for download
       res.download(filePath, encodedFileName, (err) => {
         if (err) {
           console.error("Error downloading file:", err);

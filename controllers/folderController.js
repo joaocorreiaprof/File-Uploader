@@ -1,18 +1,6 @@
-const path = require("path");
-const multer = require("multer");
+const cloudinary = require("../cloudinary");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads")); // Directory for file uploads
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // Unique filename
-  },
-});
-const upload = multer({ storage: storage }).single("file");
 
 module.exports = {
   editFolder: async (req, res) => {
@@ -77,31 +65,53 @@ module.exports = {
   uploadFileToFolder: async (req, res) => {
     const folderId = req.params.id;
 
-    upload(req, res, async (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send("File upload failed");
+    // Check if the file is uploaded
+    if (!req.file) {
+      return res.status(400).send("No file uploaded");
+    }
+
+    try {
+      const folderData = await prisma.folder.findUnique({
+        where: { id: parseInt(folderId) },
+      });
+
+      if (!folderData) {
+        return res.status(404).send("Folder not found");
       }
 
-      if (!req.file) {
-        return res.status(400).send("No file uploaded");
-      }
-
-      try {
-        // Save file metadata in the database
-        await prisma.file.create({
-          data: {
-            filename: req.file.originalname,
-            path: req.file.path,
-            folderId: parseInt(folderId),
-          },
+      // Handle file upload using Cloudinary
+      const uploadFile = (file, folderName) => {
+        return new Promise((resolve, reject) => {
+          cloudinary.uploader.upload(
+            file.path, // Path to the file uploaded by multer
+            { folder: folderName }, // Cloudinary folder
+            (error, result) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(result);
+              }
+            }
+          );
         });
+      };
 
-        res.redirect(`/folder/${folderId}`);
-      } catch (error) {
-        console.error(error);
-        res.status(500).send("Error saving file to the database");
-      }
-    });
+      // Upload the file to Cloudinary
+      const cloudinaryResult = await uploadFile(req.file, folderData.name);
+
+      // Save file metadata in the database
+      await prisma.file.create({
+        data: {
+          filename: cloudinaryResult.original_filename,
+          path: cloudinaryResult.secure_url, // Cloudinary URL
+          folderId: parseInt(folderId),
+        },
+      });
+
+      res.redirect(`/folder/${folderId}`);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error uploading file to Cloudinary");
+    }
   },
 };
