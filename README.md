@@ -27,7 +27,7 @@ This project is a full-stack application built using **Express**, **Prisma**, an
    - A download button to download files.
 
 5. **Cloud Storage**:
-   - Files are uploaded to a cloud storage service (e.g., Cloudinary).
+   - Files are uploaded to a cloud storage service (Cloudinary).
    - File URLs are saved in the database for retrieval and download.
 
 ## Technologies Used
@@ -38,7 +38,7 @@ This project is a full-stack application built using **Express**, **Prisma**, an
   - [Prisma ORM](https://www.prisma.io/) for database management
   - [Passport.js](http://www.passportjs.org/) for authentication
   - [multer](https://github.com/expressjs/multer) for file uploads
-  - Cloudinary or Supabase for cloud storage
+  - Cloudinary
 
 - **Frontend**:
 
@@ -99,6 +99,30 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 4. File Details and Downloads:
    - View file details and download files directly from the app.
 
+## Project Structure
+
+```plaintest
+File-Uploader/
+
+├── app.js # Main application entry point
+├── cloudinary.js # Cloudinary configuration for file uploads
+├── multer.js # Multer middleware configuration for file handling
+├── passport-config.js # Passport.js configuration for authentication
+├── controllers/ # Controllers for handling route logic
+├── node_modules/ # Node.js dependencies (auto-generated)
+├── package.json # Project metadata and dependencies
+├── package-lock.json # Dependency tree lock file
+├── prisma/ # Prisma schema and migrations
+│ ├── migrations/ # Database migrations
+│ └── schema.prisma # Prisma schema file
+├── public/ # Static assets (CSS, JS, images)
+├── README.md # Project documentation
+├── routes/ # Express route definitions
+├── uploads/ # Local directory for temporarily storing uploaded files
+├── views/ # EJS templates for server-side rendering
+
+```
+
 ## Future Improvements
 
 - Add user roles and permissions.
@@ -107,7 +131,7 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](https://opensource.org/license/mit).
 
 ## Credits
 
