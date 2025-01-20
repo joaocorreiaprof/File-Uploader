@@ -1,6 +1,5 @@
 const express = require("express");
 const session = require("express-session");
-const FileStore = require("session-file-store")(session);
 const passport = require("passport");
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
@@ -27,7 +26,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
-    store: new FileStore(),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
