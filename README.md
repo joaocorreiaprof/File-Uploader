@@ -104,22 +104,22 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 ```plaintest
 File-Uploader/
 
-├── app.js # Main application entry point
-├── cloudinary.js # Cloudinary configuration for file uploads
-├── multer.js # Multer middleware configuration for file handling
-├── passport-config.js # Passport.js configuration for authentication
-├── controllers/ # Controllers for handling route logic
-├── node_modules/ # Node.js dependencies (auto-generated)
-├── package.json # Project metadata and dependencies
-├── package-lock.json # Dependency tree lock file
-├── prisma/ # Prisma schema and migrations
-│ ├── migrations/ # Database migrations
-│ └── schema.prisma # Prisma schema file
-├── public/ # Static assets (CSS, JS, images)
-├── README.md # Project documentation
-├── routes/ # Express route definitions
-├── uploads/ # Local directory for temporarily storing uploaded files
-├── views/ # EJS templates for server-side rendering
+├── app.js              # Main application entry point
+├── cloudinary.js       # Cloudinary configuration for file uploads
+├── multer.js           # Multer middleware configuration for file handling
+├── passport-config.js  # Passport.js configuration for authentication
+├── controllers/        # Controllers for handling route logic
+├── node_modules/       # Node.js dependencies (auto-generated)
+├── package.json        # Project metadata and dependencies
+├── package-lock.json   # Dependency tree lock file
+├── prisma/             # Prisma schema and migrations
+│ ├── migrations/       # Database migrations
+│ └── schema.prisma     # Prisma schema file
+├── public/             # Static assets (CSS, JS, images)
+├── README.md           # Project documentation
+├── routes/             # Express route definitions
+├── uploads/            # Local directory for temporarily storing uploaded files
+├── views/              # EJS templates for server-side rendering
 
 ```
 
