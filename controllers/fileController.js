@@ -1,43 +1,32 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require("../cloudinary");
 
 module.exports = {
-  uploadFile: async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).send("No file uploaded");
-      }
-
-      const filePath = path.join(__dirname, "../uploads", req.file.filename);
-      // Save file metadata to the database (optional)
-      await prisma.file.create({
-        data: {
-          name: req.file.originalname,
-          path: filePath,
-        },
-      });
-
-      res.status(200).send("File uploaded successfully");
-    } catch (error) {
-      console.error("File upload error:", error);
-      res.status(500).send("File upload failed");
-    }
-  },
-
   deleteFile: async (req, res) => {
     const { id } = req.params;
 
     try {
+      const file = await prisma.file.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (!file) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
+      if (file.cloudinary_public_id) {
+        await cloudinary.uploader.destroy(file.cloudinary_public_id);
+      }
+
       await prisma.file.delete({
         where: { id: parseInt(id) },
       });
 
-      res.status(200).json({ message: "File deleted" });
+      res.status(200).json({ message: "File deleted successfully" });
     } catch (error) {
-      console.log(error);
-      res.status(200).send("Error deleting file");
+      console.error(error);
+      res.status(500).json({ error: "Error deleting file" });
     }
   },
 
@@ -46,14 +35,23 @@ module.exports = {
     const { fileName } = req.body;
 
     try {
+      const file = await prisma.file.findUnique({
+        where: { id: parseInt(id) },
+      });
+
+      if (!file) {
+        return res.status(404).json({ error: "File not found" });
+      }
+
       await prisma.file.update({
         where: { id: parseInt(id) },
         data: { filename: fileName },
       });
-      res.status(200).send("File updated successfully");
+
+      res.status(200).json({ message: "File updated successfully" });
     } catch (error) {
       console.error(error);
-      res.status(500).send("Error updating file");
+      res.status(500).json({ error: "Error updating file" });
     }
   },
 
@@ -66,26 +64,21 @@ module.exports = {
       });
 
       if (!file) {
-        return res.status(404).send("File not found");
+        return res.status(404).json({ error: "File not found" });
       }
 
-      const filePath = path.join(__dirname, "../uploads", file.filename);
+      // Set headers for the file download
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${encodeURIComponent(file.filename)}"`
+      );
+      res.setHeader("Content-Type", "application/octet-stream");
 
-      if (!fs.existsSync(filePath)) {
-        return res.status(404).send("File not found");
-      }
-
-      const encodedFileName = encodeURIComponent(file.filename);
-
-      res.download(filePath, encodedFileName, (err) => {
-        if (err) {
-          console.error("Error downloading file:", err);
-          res.status(500).send("Error downloading file");
-        }
-      });
+      // Redirect to the Cloudinary file URL for direct download
+      res.redirect(file.path);
     } catch (error) {
       console.error("Error downloading file:", error);
-      res.status(500).send("Error downloading file");
+      res.status(500).json({ error: "Error downloading file" });
     }
   },
 };

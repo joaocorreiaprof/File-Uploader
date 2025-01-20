@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".delete-btn").forEach((button) => {
-    console.log("button added to listener");
     button.addEventListener("click", async (event) => {
-      console.log("button pressed");
       event.preventDefault();
       const folderId = event.target.getAttribute("data-folder-id");
 

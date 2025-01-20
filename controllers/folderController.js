@@ -104,6 +104,8 @@ module.exports = {
         data: {
           filename: cloudinaryResult.original_filename,
           path: cloudinaryResult.secure_url, // Cloudinary URL
+          cloudinary_url: cloudinaryResult.secure_url,
+          cloudinary_public_id: cloudinaryResult.public_id,
           folderId: parseInt(folderId),
         },
       });

@@ -28,6 +28,8 @@ model File {
   id        Int      @id @default(autoincrement())
   filename  String
   path      String
+  cloudinary_url     String?
+  cloudinary_public_id String?
   folderId  Int
   folder    Folder   @relation(fields: [folderId], references: [id])
   createdAt DateTime @default(now())

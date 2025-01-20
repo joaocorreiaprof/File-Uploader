@@ -29,15 +29,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Adding listener for the download button
   document.querySelectorAll(".download-btn").forEach((button) => {
-    button.addEventListener("click", (event) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
       const fileId = event.target.getAttribute("data-file-id");
 
-      const downloadLink = document.createElement("a");
-      downloadLink.href = `/download-file/${fileId}`;
-      downloadLink.download = true;
-      downloadLink.click();
-    }); // <-- This closing brace was missing
+      try {
+        // Fetch file details for download
+        const response = await fetch(`/download-file/${fileId}`, {
+          method: "GET",
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const fileName =
+            event.target.getAttribute("data-file-name") || "downloaded-file";
+
+          // Create a temporary download link
+          const downloadLink = document.createElement("a");
+          downloadLink.href = URL.createObjectURL(blob);
+          downloadLink.download = fileName;
+          downloadLink.click();
+
+          // Clean up
+          URL.revokeObjectURL(downloadLink.href);
+        } else {
+          console.error("Error downloading file:", response.statusText);
+          alert("Error downloading file");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Error downloading file");
+      }
+    });
   });
 });
 
