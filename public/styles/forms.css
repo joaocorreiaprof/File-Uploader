@@ -108,7 +108,6 @@ button:active {
   transform: translateY(1px);
 }
 
-/* Small Screen Adjustments */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
