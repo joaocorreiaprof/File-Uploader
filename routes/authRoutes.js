@@ -4,12 +4,13 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 
 // Log-in route
+
 router.post(
   "/log-in",
   passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/log-in",
-    failureFlash: true,
+    successRedirect: "/", // Redirect to home after successful login
+    failureRedirect: "/log-in", // Redirect to login page if authentication fails
+    failureFlash: true, // Flash message on failure (if you have it configured)
   })
 );
 
