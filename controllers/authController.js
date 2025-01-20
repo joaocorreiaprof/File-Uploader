@@ -4,6 +4,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 module.exports = {
+  // Sign-up form and handling
   getSignUpForm: (req, res) => res.render("sign-up-form"),
 
   postSignUp: async (req, res) => {
@@ -31,21 +32,25 @@ module.exports = {
     }
   },
 
+  // Log-in form and handling
   getLoginForm: (req, res) => res.render("log-in-form"),
 
-  postLogin: passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/log-in", // Redirect back to log-in on failure
-    failureFlash: true,
-  }),
+  postLogin: (req, res, next) => {
+    passport.authenticate("local", {
+      successRedirect: "/", // Redirect to home on success
+      failureRedirect: "/log-in", // Redirect back to log-in page on failure
+      failureFlash: true,
+    })(req, res, next); // Make sure we pass req, res, next to properly handle the request
+  },
 
+  // Log-out route
   logOut: (req, res, next) => {
     req.logout((err) => {
       if (err) {
         return next(err);
       }
       req.session.destroy(() => {
-        res.redirect("/");
+        res.redirect("/"); // Redirect to home after logging out
       });
     });
   },
