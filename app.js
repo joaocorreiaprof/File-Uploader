@@ -4,6 +4,7 @@ const passport = require("passport");
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+require("dotenv").config();
 
 // Import routes
 const homeRoutes = require("./routes/homeRoutes");
