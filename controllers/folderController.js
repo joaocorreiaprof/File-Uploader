@@ -83,8 +83,8 @@ module.exports = {
       const uploadFile = (file, folderName) => {
         return new Promise((resolve, reject) => {
           cloudinary.uploader.upload(
-            file.path, // Path to the file uploaded by multer
-            { folder: folderName }, // Cloudinary folder
+            file.path,
+            { folder: folderName },
             (error, result) => {
               if (error) {
                 reject(error);
@@ -96,14 +96,13 @@ module.exports = {
         });
       };
 
-      // Upload the file to Cloudinary
       const cloudinaryResult = await uploadFile(req.file, folderData.name);
 
       // Save file metadata in the database
       await prisma.file.create({
         data: {
           filename: cloudinaryResult.original_filename,
-          path: cloudinaryResult.secure_url, // Cloudinary URL
+          path: cloudinaryResult.secure_url,
           cloudinary_url: cloudinaryResult.secure_url,
           cloudinary_public_id: cloudinaryResult.public_id,
           folderId: parseInt(folderId),
