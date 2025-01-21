@@ -8,6 +8,12 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 | ---------------------------------------------- | ------------------------------------------ | -------------------------------------------- |
 | ![Log In Screenshot](public/images/log-in.png) | ![Home Screenshot](public/images/home.png) | ![Files Screenshot](public/images/files.png) |
 
+## Live
+
+Check out the live of the file uploader application below:
+
+[Live](https://file-uploader-production-1ba7.up.railway.app/)
+
 ## Features
 
 1. **Session-Based Authentication**:
