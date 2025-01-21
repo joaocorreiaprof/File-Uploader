@@ -13,7 +13,6 @@ const fileRoutes = require("./routes/fileRoutes");
 const crudRoutes = require("./routes/crudRoutes");
 const folderRoutes = require("./routes/folderRoutes");
 
-// Import passport configuration
 require("./passport-config");
 
 const app = express();
