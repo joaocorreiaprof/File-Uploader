@@ -2,6 +2,10 @@
 
 This project is a full-stack application built using **Express**, **Prisma**, and **Passport.js**, featuring session-based authentication, folder and file management, and cloud storage integration.
 
+## Screenshots
+
+![Project Screenshot](images/log-in.png)
+
 ## Features
 
 1. **Session-Based Authentication**:
