@@ -97,8 +97,6 @@ module.exports = {
       };
 
       const cloudinaryResult = await uploadFile(req.file, folderData.name);
-
-      // Save file metadata in the database
       await prisma.file.create({
         data: {
           filename: cloudinaryResult.original_filename,
