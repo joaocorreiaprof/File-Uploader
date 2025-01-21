@@ -8,7 +8,7 @@ router.post(
   "/log-in",
   passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/log-in",
+    failureRedirect: "/sign-up",
     failureFlash: true,
   })
 );

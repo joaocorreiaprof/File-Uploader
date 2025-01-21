@@ -35,7 +35,7 @@ module.exports = {
 
   postLogin: passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/",
+    failureRedirect: "/sign-up",
   }),
 
   logOut: (req, res, next) => {
