@@ -4,7 +4,8 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 
 ## Screenshots
 
-![Project Screenshot](images/log-in.png)
+![Project Screenshot](public/images/log-in.png)
+{width=50%}
 
 ## Features
 
