@@ -10,7 +10,7 @@ This project is a full-stack application built using **Express**, **Prisma**, an
 
 ## Live
 
-Check out the live of the file uploader application below:
+Check out the live application below:
 
 [File Uploader](https://file-uploader-production-1ba7.up.railway.app/)
 
